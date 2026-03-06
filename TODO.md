@@ -143,6 +143,10 @@
 
 ## Enhancements
 
+* Introduce a new `.messages_ml` file format where a message is produced by
+  OCaml code (instead of being a string literal). This file format should
+  allow an OCaml code header. (Suggested by Brian Ward.)
+
 * During the expansion of nullable symbols (`--expand-nullable-symbols`), we
   lose the property that every production has a (unique, predictable) `@name`
   attribute. Yet this property is needed by the unparsing API. Restore it.
