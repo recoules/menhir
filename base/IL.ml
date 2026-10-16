@@ -27,7 +27,7 @@ and interface_item =
     (* A functor, always named [Make]. If the list of functor parameters is
        empty then the functor is omitted entirely; so [IIFunctor ([], i)]
        is considered equivalent to just [i]. *)
-  | IIFunctor of string located list * interface
+  | IIFunctor of string * string located list * interface
     (* Exception declarations. *)
   | IIExcDecls of excdef list
     (* Algebraic data type declarations. *)
@@ -37,6 +37,7 @@ and interface_item =
     (* Include directive. *)
   | IIInclude of module_type
     (* Submodule. *)
+  | IIModuleType of string * module_type
   | IIModule of string * module_type
     (* Comment. *)
   | IIComment of string
@@ -243,6 +244,7 @@ and expr =
   | EStringConst of string
   | EData of string * expr list
   | ETuple of expr list
+  | EList of expr list
 
   (* Type annotation. *)
   | EAnnot of expr * typescheme
@@ -325,7 +327,7 @@ and structure =
 (**A structure item.*)
 and structure_item =
     (* Functor. Called [Make]. No functor if no parameters. Very ad hoc! *)
-  | SIFunctor of string located list * structure
+  | SIFunctor of string * string located list * structure
     (* Exception definitions. *)
   | SIExcDefs of excdef list
     (* Algebraic data type definitions (mutually recursive). *)
@@ -334,6 +336,8 @@ and structure_item =
   | SIValDefs of bool * valdefs
     (* Raw OCaml code. *)
   | SIFragment of string located list
+   (* Sub-module definition. *)
+  | SIModuleTypeDef of string * module_type
     (* Sub-module definition. *)
   | SIModuleDef of string * modexpr
     (* Module inclusion. *)

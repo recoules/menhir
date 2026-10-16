@@ -964,7 +964,7 @@ let grammar =
   Front.grammar
 
 let program =
-  [ SIFunctor (grammar.parameters,
+  [ SIFunctor ("Make", grammar.parameters,
 
       basics_submodule_def grammar @
 

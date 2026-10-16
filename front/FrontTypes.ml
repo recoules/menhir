@@ -65,7 +65,7 @@ type merge_fun =
   Action.t
 
 (**The associativity status of a terminal symbol. *)
-type associativity =
+type associativity = MenhirMrk.MiddleAPI.associativity =
   | LeftAssoc
   | RightAssoc
   | NonAssoc
@@ -80,14 +80,14 @@ type associativity =
    is an input file and [level] is an integer level. Within each file, later
    declarations receive greater levels, which represent higher priority. Two
    declarations that originate in different files are incomparable. *)
-type precedence_level =
+type precedence_level = MenhirMrk.MiddleAPI.precedence_level =
   | UndefinedPrecedence
-  | PrecedenceLevel of (InputFile.file * int) located
+  | PrecedenceLevel of (string * int) located
 
 (**A "production level" is used to solve reduce/reduce conflicts. It reflects
    which production appears first in the grammar. See [ParserAux]. *)
-type production_level =
-  | ProductionLevel of InputFile.file * int
+type production_level = MenhirMrk.MiddleAPI.production_level =
+  | ProductionLevel of string * int
 
 (**A [%prec] annotation is optional. A production can carry at most one.
    If there is one, it is a symbol name. See [ParserAux]. *)

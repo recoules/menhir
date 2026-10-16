@@ -332,7 +332,7 @@ let program () =
      because, in principle, the semantic actions may refer to it or to its
      data constructors. *)
 
-  [ SIFunctor (grammar.parameters,
+  [ SIFunctor ("Make", grammar.parameters,
     interface_to_structure (TokenType.tokentypedef grammar) @
     SIFragment grammar.preludes ::
     SIValDefs (false, [ begin_def; main_def; end_def ]) ::

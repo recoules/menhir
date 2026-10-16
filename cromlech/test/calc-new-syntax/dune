@@ -1,0 +1,6 @@
+(test
+ (name main)
+ (libraries cromlech))
+
+(ocamllex
+ (modules lexer))

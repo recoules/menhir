@@ -251,7 +251,7 @@ let compare_tokens (_token, prop) (_token', prop') =
   | PrecedenceLevel _, UndefinedPrecedence ->
       1
   | PrecedenceLevel mv, PrecedenceLevel mv' ->
-      compare_pairs InputFile.compare Int.compare (value mv) (value mv')
+      compare_pairs String.compare Int.compare (value mv) (value mv')
 
 let print_token_declarations () =
   grammar.tokens |> StringMap.iter @@ fun token prop ->
@@ -331,7 +331,7 @@ let print_branch branch =
 let compare_production_levels bpl bpl' =
   match bpl, bpl' with
   | ProductionLevel (m, l), ProductionLevel (m', l') ->
-      compare_pairs InputFile.compare Int.compare (m, l) (m', l')
+      compare_pairs String.compare Int.compare (m, l) (m', l')
 
 let compare_branches (b : branch) (b' : branch) =
   compare_production_levels b.production_level b'.production_level

@@ -133,7 +133,7 @@ let precedence_order p1 p2 : order =
   | PrecedenceLevel fl1, PrecedenceLevel fl2 ->
       let file1, level1 = value fl1
       and file2, level2 = value fl2 in
-      if not (InputFile.equal file1 file2) then
+      if not (String.equal file1 file2) then
         Incomparable
       else if level1 > level2 then
         Gt
@@ -145,7 +145,7 @@ let precedence_order p1 p2 : order =
 let production_order p1 p2 : order =
   match p1, p2 with
   | ProductionLevel (file1, level1), ProductionLevel (file2, level2) ->
-      if not (InputFile.equal file1 file2) then
+      if not (String.equal file1 file2) then
         Incomparable
       else if level1 > level2 then
         Gt

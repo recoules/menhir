@@ -157,7 +157,7 @@ let grammar_before_expansion =
 (* Expand away all applications of parameterized nonterminal symbols,
    so as to obtain a grammar without parameterized nonterminal symbols. *)
 
-let grammar : PlainSyntax.grammar =
+let (grammar_after_expansion, grammar) : Syntax.grammar * PlainSyntax.grammar =
   monitor @@ fun c ->
   Time.time "Expanding parameterized nonterminal symbols" @@ fun () ->
   let open SelectiveExpansion in
@@ -174,7 +174,7 @@ let grammar : PlainSyntax.grammar =
      more complicated names, reflecting the two steps of expansion.) *)
   let grammar = expand ExpandAll sorts grammar in
   (* This yields an unparameterized grammar. *)
-  Drop.drop grammar
+  grammar, Drop.drop grammar
 
 (* ------------------------------------------------------------------------- *)
 

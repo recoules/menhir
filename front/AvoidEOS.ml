@@ -45,7 +45,7 @@ let new_start_branch symbol =
   and producers = [ producer "_1" symbol; producer "_2" eof ]
   and action = Action.make 0 StringSet.empty [] IL.EUnit
   and prec_annotation = None
-  and production_level = ProductionLevel (InputFile.builtin, 0)
+  and production_level = ProductionLevel (InputFile.name InputFile.builtin, 0)
   and br_attributes = [] in
   { branch_position; producers; action;
     prec_annotation; production_level; br_attributes }

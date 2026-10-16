@@ -21,13 +21,23 @@
    This information is not accessible elsewhere. *)
 
 open Report
-open PlainSyntax
 open MiddleAPI
 
+(**This type reflects the outcome of a comparison
+   in a possibly-non-total order. *)
+type order =
+  | Lt
+  | Gt
+  | Eq
+  | Incomparable
+
+(**[precedence_order] compares two precedence levels. *)
+val precedence_order : precedence_level -> precedence_level -> order
+
+(**[production_order] compares two production levels. *)
+val production_order : production_level -> production_level -> order
+
 module Make
-(F : sig
-  val grammar : grammar
-end)
 (G : GRAMMAR)
 : sig
 open G

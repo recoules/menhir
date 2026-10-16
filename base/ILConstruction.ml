@@ -240,9 +240,10 @@ let rec interface_item_to_structure_item = function
       [ SITypeDefs (flag, defs) ]
   | IIModule (name, MTSigEnd intf) ->
       [ SIModuleDef (name, MStruct (interface_to_structure intf)) ]
-  | IIFunctor (_, _)
+  | IIFunctor (_, _, _)
   | IIValDecls _
   | IIInclude _
+  | IIModuleType (_, _)
   | IIModule (_, _)
   | IIComment _
   | IIClass _ ->

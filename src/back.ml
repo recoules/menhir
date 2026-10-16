@@ -70,6 +70,19 @@ let () =
       Time.time "Printing" @@ fun () ->
       write B.program;
       Interface.write Front.grammar mli ()
+  | `PartialCodeBackend ->
+      let partial_grammar = PartialCodeBackend.slice ~filenames:Settings.partial_targets Front.grammar_after_expansion in
+      let typed_partial_grammar = PartialCodeBackend.infer partial_grammar Front.grammar_before_inlining.types in
+      let module B = PartialCodeBackend.Run (struct let grammar = typed_partial_grammar end) in
+      Time.time "Printing" @@ fun () ->
+        let module P = ILPrinter.Make (struct
+          let filename = Settings.base ^ ".mli"
+          let f = open_out filename
+          let print_line_directives = None
+         include Settings
+        end) in
+      P.interface B.interface;
+      write B.program
   | `NoBackend ->
       (* If no back-end was selected then we must have exited earlier. *)
       assert false

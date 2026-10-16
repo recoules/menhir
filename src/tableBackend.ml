@@ -845,7 +845,7 @@ let unparsing_API () : structure =
 
 let program =
 
-  [ SIFunctor (grammar.parameters,
+  [ SIFunctor ("Make", grammar.parameters,
 
     (* Make a reference to [MenhirLib.StaticVersion.require_XXXXXXXX], where
        [XXXXXXXX] is our 8-digit version number. This ensures that the

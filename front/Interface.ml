@@ -278,7 +278,7 @@ let tables () =
 (* The complete interface of the generated parser. *)
 
 let interface grammar = [
-  IIFunctor (grammar.parameters,
+  IIFunctor ("Make", grammar.parameters,
     monolithic_api grammar @
     provided X.incremental (incremental_api grammar) @
     provided X.unparsing (unparsing_api grammar) @

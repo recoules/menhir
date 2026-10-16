@@ -36,9 +36,12 @@ module Code (G : sig
     val mapx: (t -> 'a) -> 'a list
   end
   module Symbol : sig
-    type t =
-      | N of Nonterminal.t
-      | T of Terminal.t
+    type ('nonterminal, 'terminal) symbol = ('nonterminal, 'terminal) MenhirMrk.MiddleAPI.symbol =
+      | N of 'nonterminal
+      | T of 'terminal
+
+  (**A symbol is either a nonterminal symbol or a terminal symbol. *)
+    type t = (Nonterminal.t, Terminal.t) symbol
   end
   module Production : sig
     type t

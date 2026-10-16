@@ -34,13 +34,13 @@ let new_precedence_level =
   fun (pos1, pos2) ->
     incr c;
     let range = Range.make (pos1, pos2) in
-    PrecedenceLevel (locate range (InputFile.current(), !c))
+    PrecedenceLevel (locate range (InputFile.name (InputFile.current()), !c))
 
 let new_production_level =
   let c = ref 0 in
   fun () ->
     incr c;
-    ProductionLevel (InputFile.current(), !c)
+    ProductionLevel (InputFile.name (InputFile.current()), !c)
 
 let new_on_error_reduce_level =
   new_production_level

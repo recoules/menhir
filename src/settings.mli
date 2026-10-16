@@ -51,6 +51,7 @@ val backend: [
   | `Interpret    of [`ShowCST | `DoNotShowCST]
   | `InterpretGLR of [`ShowCST | `DoNotShowCST]
   | `InterpretError
+  | `PartialCodeBackend
 ]
 
 (**[enabled_GLR] is true if the backend if [`GLRBackend] or [`InterpretGLR _],
@@ -59,6 +60,9 @@ val enabled_GLR: bool
 
 (** The list of file names that appear on the command line. *)
 val filenames: string list
+
+(** The list of file names that need to be compiled by the partial code backend. *)
+val partial_targets: string list
 
 (**If [token_type_only] is true then Menhir stops after generating the
    definition of the type [token]. This corresponds to [--only-tokens]. *)

@@ -482,7 +482,7 @@ let if_plural ts text =
 let try_explain out node ts =
 
   (* Construct a partial canonical automaton. *)
-  let module P = LR1Partial.Run(A)(struct
+  let module P = MenhirMrk.LR1Partial.Run(A)(struct
     let goal = node
     let conflicts = ts
   end) in
@@ -581,7 +581,7 @@ let explain out node ts =
   try
     try_explain out node ts;
     flush out
-  with LR1Partial.Oops ->
+  with MenhirMrk.LR1Partial.Oops ->
     cannot_explain out node ts
 
 (* -------------------------------------------------------------------------- *)

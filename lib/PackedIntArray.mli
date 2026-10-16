@@ -59,3 +59,6 @@ val get16: string -> int -> int
 
 (**[get32] is [get], specialized to the bit width 32. *)
 val get32: string -> int -> int
+
+(** [get k] returns the integer getter for the bit width [k]. *)
+val get : int -> string -> int -> int

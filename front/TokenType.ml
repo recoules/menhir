@@ -163,10 +163,10 @@ let write base inspection comment grammar =
   (* Write an [.mli] file. *)
   let f = open_out (base ^ ".mli") in
   let module P = ILPrinter.Make (struct include F let f = f end) in
-  P.interface [ IIFunctor (grammar.parameters, i) ];
+  P.interface [ IIFunctor ("Make", grammar.parameters, i) ];
   (* Write an [.ml] file. *)
   let f = open_out (base ^ ".ml") in
   let module P = ILPrinter.Make (struct include F let f = f end) in
-  P.program [ SIFunctor (grammar.parameters, interface_to_structure i) ]
+  P.program [ SIFunctor ("Make", grammar.parameters, interface_to_structure i) ]
 
 end (* Make *)

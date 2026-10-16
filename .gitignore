@@ -1,5 +1,7 @@
 *~
 _build
+_opam
+.vscode
 analysis/data.csv
 analysis/*.pdf
 dune-workspace.versions

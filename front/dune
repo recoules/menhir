@@ -8,6 +8,7 @@
   (libraries
     base
     menhirSdk
+    menhir.mrk
   )
   (flags :standard -open Base -open MenhirSdk)
 )

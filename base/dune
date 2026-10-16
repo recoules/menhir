@@ -5,6 +5,7 @@
 ;; independent of Menhir: utility functions, data structures, etc.
 
 (library
+  (package menhir)
   (name base)
   (libraries
     unix

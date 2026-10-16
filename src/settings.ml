@@ -190,6 +190,9 @@ let ocamldep =
 let filenames =
   ref StringSet.empty
 
+let partial_targets =
+  ref StringSet.empty
+
 let no_stdlib =
   ref false
 
@@ -481,6 +484,8 @@ let options = [
   "--suggest-ocamlfind", Arg.Unit (fun () -> suggestion := SuggestUseOcamlfind),
                          " (deprecated)";
   "--table", Arg.Unit (set_backend `TableBackend), " Use the table back-end";
+  "--partial", Arg.String (fun file -> set_backend `PartialCodeBackend (); partial_targets := StringSet.add file !partial_targets),
+               " Use the partial code back-end for this file";
   "--test-GLR", Arg.Set test_GLR, " (undocumented)";
   "--timings", Arg.Unit (fun () -> Time.set_output_channel (Some stderr)), " Output internal timings to stderr";
   "--timings-to", Arg.String (fun filename -> Time.set_output_channel (Some (open_out filename))), "<filename> Output internal timings to <filename>";
@@ -550,7 +555,7 @@ let backend =
   | `No, `Unspecified ->
       (* The code back-end is the default. *)
       `CodeBackend
-  | `No, (`RocqBackend | `CodeBackend | `TableBackend | `GLRBackend | `NoBackend as backend) ->
+  | `No, (`RocqBackend | `CodeBackend | `TableBackend | `PartialCodeBackend | `GLRBackend | `NoBackend as backend) ->
       backend
 
 let () =
@@ -573,6 +578,8 @@ let print_backend backend =
       "Rocq back-end"
   | `TableBackend ->
       "table back-end"
+  | `PartialCodeBackend ->
+      "partial code back-end"
   | `GLRBackend ->
       "GLR back-end"
   | `NoBackend ->
@@ -602,6 +609,7 @@ let strategy =
   | _, `RocqBackend
   | _, `GLRBackend
   | _, `InterpretGLR _
+  | _, `PartialCodeBackend
   | _, `NoBackend ->
       (* These back-ends do not care. *)
       `Simplified
@@ -701,6 +709,15 @@ let base =
   else
     !base
 
+let partial_targets =
+  StringSet.fold
+    (fun filename acc ->
+     let filename = if Filename.check_suffix filename ".mly" then filename else filename ^ ".mly" in
+     match List.find_all (String.ends_with ~suffix:filename) filenames with
+     | [] -> error "Error: no matching command line filename for partial target %s.\n" filename
+     | [ filename ] -> filename :: acc
+     | _ -> error "Error: partial target %s is ambiguous" filename)
+  !partial_targets []
 let mode =
   !mode
 

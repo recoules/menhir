@@ -218,6 +218,9 @@ let fragment f (frag : string located) =
   match print_line_directives with
   | Some basename ->
       let range = Located.position frag in
+      if Range.is_dummy range then
+        output_string f (Located.value frag)
+      else (
       (* Emit a line directive. *)
       sharp f (Range.linenum range) (Range.filename range);
       (* Emit horizontal padding. *)
@@ -230,7 +233,7 @@ let fragment f (frag : string located) =
          counter of the directive that we are just about to print. *)
       sharp f (!line + 2) basename;
       (* Emit indentation. *)
-      output_whitespace f !indentation
+      output_whitespace f !indentation)
   | None ->
       output_string f (Located.value frag)
 
@@ -371,6 +374,7 @@ let rec member e k =
   | EIntConst _
   | EStringConst _
   | EUnit
+  | EList _
   | EArray _
   | EArrayAccess (_, _) ->
       true
@@ -505,6 +509,8 @@ and exprk k f e =
         fprintf f "%a.%s" atom e field
     | ERecord fs ->
         fprintf f "{%a%t}" (indent 2 (seplist field nl)) fs nl
+    | EList fs ->
+      fprintf f "[%a%t]" (indent 2 (seplist array_field nl)) fs nl
     | EArray fs ->
         fprintf f "[|%a%t|]" (indent 2 (seplist array_field nl)) fs nl
     | EArrayAccess (e, i) ->
@@ -782,20 +788,30 @@ let excdef in_intf f def =
 let excdefs in_intf =
   pdefs (excdef in_intf) exc exc
 
+let valdecl f (x, ts) =
+  fprintf f "val %s: %a" x typ ts.body
+
+let with_kind f = function
+  | WKNonDestructive ->
+      output_string f "="
+  | WKDestructive ->
+      output_string f ":="
+
+
 (* Convention: each structure (or interface) item prints a newline before and
    after itself. *)
 
 let rec structure_item f item =
   match item with
-  | SIFunctor ([], s) ->
+  | SIFunctor (_, [], s) ->
       structure f s
   | SIFragment fragments ->
       List.iter (fragment f) fragments
   | _ ->
     nl f;
     begin match item with
-    | SIFunctor (params, s) ->
-        fprintf f "module Make%a%t= %a"
+    | SIFunctor (name, params, s) ->
+        fprintf f "module %s%a%t= %a" name
           (list parenthesized_fragment nl) params
           nl
           structend s
@@ -807,6 +823,8 @@ let rec structure_item f item =
         valdefs recursive f defs
     | SIFragment _ ->
         assert false (* already handled above *)
+    | SIModuleTypeDef (name, rhs) ->
+        fprintf f "module type %s = %a" name module_type rhs
     | SIModuleDef (name, rhs) ->
         fprintf f "module %s = %a" name modexpr rhs
     | SIInclude e ->
@@ -911,16 +929,7 @@ and class_field_spec f cfs =
   end;
   nl f
 
-let valdecl f (x, ts) =
-  fprintf f "val %s: %a" x typ ts.body
-
-let with_kind f = function
-  | WKNonDestructive ->
-      output_string f "="
-  | WKDestructive ->
-      output_string f ":="
-
-let rec module_type f = function
+and module_type f = function
   | MTNamedModuleType s ->
       output_string f s
   | MTWithType (mt, params, name, wk, t) ->
@@ -938,13 +947,13 @@ and with_type f (params, name, wk, t) =
 
 and interface_item f item =
   match item with
-  | IIFunctor ([], i) ->
+  | IIFunctor (_, [], i) ->
       interface f i
   | _ ->
     nl f;
     begin match item with
-    | IIFunctor (params, i) ->
-        fprintf f "module Make%a%t: %a"
+    | IIFunctor (name, params, i) ->
+        fprintf f "module %s%a%t: %a" name
           (list parenthesized_fragment nl) params nl
           sigend i
     | IIExcDecls defs ->
@@ -955,6 +964,8 @@ and interface_item f item =
         pdefs valdecl nothing nothing f decls
     | IIInclude mt ->
         fprintf f "include %a" module_type mt
+    | IIModuleType (name, mt) ->
+        fprintf f "module type %s = %a" name module_type mt
     | IIModule (name, mt) ->
         fprintf f "module %s : %a" name module_type mt
     | IIComment comment ->

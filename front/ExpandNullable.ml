@@ -398,7 +398,7 @@ let () =
    decorate branches that will be inlined away. *)
 
 let dummy_production_level =
-  ProductionLevel (InputFile.builtin, 0)
+  ProductionLevel (InputFile.name InputFile.builtin, 0)
 
 (* [unit_branch nt] constructs a branch (that is, the right-hand side of a
    production) of length 1, whose symbol is the nonterminal symbol [nt]. *)

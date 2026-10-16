@@ -656,7 +656,7 @@ let versiondef =
 
 let program =
 
-  [ SIFunctor (grammar.parameters,
+  [ SIFunctor ("Make", grammar.parameters,
 
     SIComment "This generated code requires the following version of MenhirGLR:" ::
     valdef versiondef ::

@@ -73,7 +73,7 @@ let () =
    be solved by prodiving precedence declarations. *)
 
 module Precedence =
-  Precedence.Make(Front)(Grammar)
+  Precedence.Make(Grammar)
 
 module A1 =
   SilentConflictResolution.Run(A0)(Precedence)

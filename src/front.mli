@@ -19,6 +19,8 @@
    have been expanded. *)
 val grammar_before_expansion : Syntax.grammar
 
+val grammar_after_expansion : Syntax.grammar
+
 (**This is the grammar as it exists after parameterized nonterminal symbols
    have been expanded and before nonterminal symbols marked with [%inline]
    have been eliminated. *)
